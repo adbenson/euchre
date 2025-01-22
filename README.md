@@ -27,7 +27,7 @@ That said, this implementation is complete and accurate with thorough rules for 
 - Flashy post-game card waterfall with pseudo-3D rotation effect accomplished entirely through CSS.
 - Fast-forward button (lower right corner) to automatically make next play to simplify demonstration.
 
-# Euchre
+## Euchre
 
 Euchre is a trick-taking card game with two teams of two players each.
 Each player is dealt a "hand" of 5 cards and given the chance to declare which suit will be "trump" and beat all other suits.
