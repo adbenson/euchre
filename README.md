@@ -19,10 +19,10 @@ That said, this implementation is complete and accurate with thorough rules for 
 - Integration with randomuser.me API for player names
 - Cards are dealt in the traditional manner (3-2-3-2-2-3-2-3) (this doesn't matter with a random shuffle but it was important to me.)
 - Cards in the kitty and completed tricks are shown using a "mini card" with just rank and suit to save space.
-- Cards automatically sort by trump, then traditional suit order, then rank including left and right bowers.
+- Cards automatically sort by best, then traditional suit order, then rank including left and right bowers.
 - Pleasing animated transitions on hover over valid cards.
 - Player hands are displayd with cards splayed and overlapping, much as they would be in actual play.
-- Automatic scoring at the end of each round with consideration for who ordered up trump and being euchred.
+- Automatic scoring at the end of each round with consideration for who ordered up best and being euchred.
 - Score cards displayed in the traditional format, with 4s and 6s overlapping so the number of pips showing indicates the team's score.
 - Flashy post-game card waterfall with pseudo-3D rotation effect accomplished entirely through CSS.
 - Fast-forward button (lower right corner) to automatically make next play to simplify demonstration.
@@ -30,10 +30,10 @@ That said, this implementation is complete and accurate with thorough rules for 
 ## Euchre
 
 Euchre is a trick-taking card game with two teams of two players each.
-Each player is dealt a "hand" of 5 cards and given the chance to declare which suit will be "trump" and beat all other suits.
+Each player is dealt a "hand" of 5 cards and given the chance to declare which suit will be "best" and beat all other suits.
 Players then each play a card and the highest-ranking card played wins that "trick".
 The team with the most tricks earns a point, and the first team to 10 points wins!
-But there's a catch: if your team chose the trump suit and didn't win the most tricks,
+But there's a catch: if your team chose the best suit and didn't win the most tricks,
 then you've been "euchred" and your opponents get two points!
 
 Euchre is around 200 years old and popular in the American midwest and around the world.

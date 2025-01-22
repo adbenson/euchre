@@ -1,6 +1,6 @@
 import { shuffle } from "../array-utils";
 import { newCard, CardFace, Cards, CardSuit, codeToCard, Card } from "./card-models";
-import { addScores, cardScore, deal, deck, handOver, isLeftBower, isRightBower, isTrumpCard, leftOfPlayer, rightOfPlayer, scoreHand, sortCards, winningPlayer } from "./game-rules";
+import { addScores, cardScore, deal, deck, handOver, isLeftBower, isRightBower, isBestCard, leftOfPlayer, rightOfPlayer, scoreHand, sortCards, winningPlayer } from "./game-rules";
 import { PlayerAction, Team, Trick } from "./game-state";
 
 function tricks(...wins: Array<number>): Array<Array<Trick>> {
@@ -151,15 +151,15 @@ describe("game rules", () => {
 			}
 		});
 	});
-	describe("isTrumpCard", () => {
-		it("identifies trump card", () => {
-			expect(isTrumpCard(newCard(CardSuit.SPADES, 6), CardSuit.SPADES)).toBeTruthy();
+	describe("isBestCard", () => {
+		it("identifies best card", () => {
+			expect(isBestCard(newCard(CardSuit.SPADES, 6), CardSuit.SPADES)).toBeTruthy();
 		});
 		it("identifies left bower", () => {
-			expect(isTrumpCard(newCard(CardSuit.SPADES, CardFace.JACK), CardSuit.CLUBS)).toBeTruthy();
+			expect(isBestCard(newCard(CardSuit.SPADES, CardFace.JACK), CardSuit.CLUBS)).toBeTruthy();
 		});
-		it("rejects non-trump jack", () => {
-			expect(isTrumpCard(newCard(CardSuit.CLUBS, CardFace.JACK), CardSuit.DIAMONDS)).toBeFalsy();
+		it("rejects non-best jack", () => {
+			expect(isBestCard(newCard(CardSuit.CLUBS, CardFace.JACK), CardSuit.DIAMONDS)).toBeFalsy();
 		});
 	});
 	describe("isRightBower", () => {
@@ -194,57 +194,57 @@ describe("game rules", () => {
 		});
 	});
 	describe("sortCards", () => {
-		it("sorts same suit no trump no lead", () => {
+		it("sorts same suit no best no lead", () => {
 			const cards = codesToCards(["H2", "H3", "H10", "HJ", "HQ", "HK", "HA"]);
 			const sorted = sortCards(shuffle(cards));
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same suit not trump no lead", () => {
+		it("sorts same suit not best no lead", () => {
 			const cards = codesToCards(["H2", "H3", "H10", "HJ", "HQ", "HK", "HA"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.SPADES);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same suit not trump not lead", () => {
+		it("sorts same suit not best not lead", () => {
 			const cards = codesToCards(["H2", "H3", "H10", "HJ", "HQ", "HK", "HA"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.SPADES, CardSuit.CLUBS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same suit trump no lead", () => {
+		it("sorts same suit best no lead", () => {
 			const cards = codesToCards(["H2", "H3", "H10", "HQ", "HK", "HA", "DJ", "HJ"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.HEARTS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same suit trump and lead", () => {
+		it("sorts same suit best and lead", () => {
 			const cards = codesToCards(["H2", "H3", "H10", "HQ", "HK", "HA", "DJ", "HJ"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.HEARTS, CardSuit.HEARTS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same card in four suits no trump no lead", () => {
+		it("sorts same card in four suits no best no lead", () => {
 			const cards = codesToCards(["HA", "CA", "DA", "SA"]);
 			const sorted = sortCards(shuffle(cards));
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same card in four suits with trump no lead", () => {
+		it("sorts same card in four suits with best no lead", () => {
 			const cards = codesToCards(["HA", "DA", "SA", "CA"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.CLUBS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same card in four suits with trump with lead", () => {
+		it("sorts same card in four suits with best with lead", () => {
 			const cards = codesToCards(["DA", "SA", "HA", "CA"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.CLUBS, CardSuit.HEARTS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts same card in four suits with trump with lead", () => {
+		it("sorts same card in four suits with best with lead", () => {
 			const cards = codesToCards(["DA", "SA", "HA", "CA"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.CLUBS, CardSuit.HEARTS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts mix of trump and next cards no lead", () => {
+		it("sorts mix of best and next cards no lead", () => {
 			const cards = codesToCards(["S10", "SQ", "SK", "SA", "C9", "CQ", "CA", "SJ", "CJ"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.CLUBS);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
 		});
-		it("sorts mix of trump and next cards with next led", () => {
+		it("sorts mix of best and next cards with next led", () => {
 			const cards = codesToCards(["S10", "SQ", "SK", "SA", "C9", "CQ", "CA", "SJ", "CJ"]);
 			const sorted = sortCards(shuffle(cards), CardSuit.CLUBS, CardSuit.SPADES);
 			expect(sorted.map(c => c.code)).toEqual(cards.map(c => c.code));
@@ -256,54 +256,54 @@ describe("game rules", () => {
 		});
 	});
 	describe("cardScore", () => {
-		// it("scores non-trump non-lead number card", () => {
+		// it("scores non-best non-lead number card", () => {
 		// 	const score = cardScore(newCard(CardSuit.SPADES, 9), CardSuit.CLUBS, CardSuit.HEARTS);
 
 		// 	expect(score).toEqual(card.rank);
 		// });
-		// it("scores non-trump lead number card", () => {
+		// it("scores non-best lead number card", () => {
 		// 	const card = newCard(CardSuit.SPADES, 8);
 
 		// 	const score = cardScore(card, CardSuit.CLUBS, CardSuit.SPADES);
 
 		// 	expect(score).toEqual(card.rank as number + 100);
 		// });
-		// it("scores trump lead number card", () => {
+		// it("scores best lead number card", () => {
 		// 	const card = newCard(CardSuit.SPADES, 7);
 
 		// 	const score = cardScore(card, CardSuit.SPADES, CardSuit.SPADES);
 
 		// 	expect(score).toEqual(card.rank as number + 100 + 1000);
 		// });
-		// it("scores trump non-lead number card", () => {
+		// it("scores best non-lead number card", () => {
 		// 	const card = newCard(CardSuit.SPADES, 6);
 
 		// 	const score = cardScore(card, CardSuit.SPADES, CardSuit.CLUBS);
 
 		// 	expect(score).toEqual(card.rank as number + 1000);
 		// });
-		// it("scores non-trump non-lead face card", () => {
+		// it("scores non-best non-lead face card", () => {
 		// 	const card = newCard(CardSuit.SPADES, CardFace.QUEEN);
 
 		// 	const score = cardScore(card, CardSuit.CLUBS, CardSuit.HEARTS);
 
 		// 	expect(score).toEqual(12);
 		// });
-		// it("scores non-trump lead face card", () => {
+		// it("scores non-best lead face card", () => {
 		// 	const card = newCard(CardSuit.HEARTS, CardFace.KING);
 
 		// 	const score = cardScore(card, CardSuit.CLUBS, CardSuit.HEARTS);
 
 		// 	expect(score).toEqual(13 + 100);
 		// });
-		// it("scores trump lead face card", () => {
+		// it("scores best lead face card", () => {
 		// 	const card = newCard(CardSuit.CLUBS, CardFace.ACE);
 
 		// 	const score = cardScore(card, CardSuit.CLUBS, CardSuit.CLUBS);
 
 		// 	expect(score).toEqual(13 + 100 + 1000);
 		// });
-		// it("scores trump non-lead face card", () => {
+		// it("scores best non-lead face card", () => {
 		// 	const card = newCard(CardSuit.DIAMONDS, CardFace.QUEEN);
 
 		// 	const score = cardScore(card, CardSuit.DIAMONDS, CardSuit.SPADES);
@@ -350,7 +350,7 @@ describe("game rules", () => {
 
 			expect(winner).toBe(3);
 		});
-		it("Low trump wins", () => {
+		it("Low best wins", () => {
 			const plays: ReadonlyArray<PlayerAction> = [
 				{player: 2, card: newCard(CardSuit.CLUBS, CardFace.ACE),},
 				{player: 3, card: newCard(CardSuit.HEARTS, CardFace.ACE),},
@@ -362,7 +362,7 @@ describe("game rules", () => {
 
 			expect(winner).toBe(1);
 		});
-		it("Low lead wins (no trump)", () => {
+		it("Low lead wins (no best)", () => {
 			const plays: ReadonlyArray<PlayerAction> = [
 				{player: 2, card: newCard(CardSuit.CLUBS, 9),},
 				{player: 3, card: newCard(CardSuit.HEARTS, CardFace.ACE),},
@@ -374,7 +374,7 @@ describe("game rules", () => {
 
 			expect(winner).toBe(2);
 		});
-		it("Second-lowest lead wins (no trump)", () => {
+		it("Second-lowest lead wins (no best)", () => {
 			const plays: ReadonlyArray<PlayerAction> = [
 				{player: 2, card: newCard(CardSuit.CLUBS, 9),},
 				{player: 3, card: newCard(CardSuit.HEARTS, CardFace.ACE),},
@@ -386,7 +386,7 @@ describe("game rules", () => {
 
 			expect(winner).toBe(1);
 		});
-		it("Lead ace wins (no trump)", () => {
+		it("Lead ace wins (no best)", () => {
 			const plays: ReadonlyArray<PlayerAction> = [
 				{player: 2, card: newCard(CardSuit.DIAMONDS, 9),},
 				{player: 3, card: newCard(CardSuit.DIAMONDS, CardFace.KING),},
@@ -410,7 +410,7 @@ describe("game rules", () => {
 
 			expect(winner).toBe(3);
 		});
-		it("Left bower lead wins against trump Ace", () => {
+		it("Left bower lead wins against best Ace", () => {
 			const plays: ReadonlyArray<PlayerAction> = [
 				{player: 0, card: newCard(CardSuit.HEARTS, CardFace.JACK),},
 				{player: 1, card: newCard(CardSuit.CLUBS, CardFace.JACK),},

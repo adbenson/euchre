@@ -31,7 +31,7 @@ export enum GamePhase {
 	INTRO = "INTRO", // Show the user the introduction text
 	DEAL = "DEAL", // Distribute deck to players and kitty
 	BID1 = "BID1", // Players may order up card to dealer
-	BID2 = "BID2", // Players may choose trump,
+	BID2 = "BID2", // Players may choose best,
 	DEALER_DISCARD = "DEALER_DISCARD",
 	PLAY_HAND = "PLAY_HAND", // Players choose a card to play until none remain
 	SCORE_ROUND = "SCORE_ROUND",
@@ -67,7 +67,7 @@ export interface GameState {
 	readonly table: TableState;
 	readonly currentPlayer: number;
 
-	readonly trump?: CardSuit;
+	readonly best?: CardSuit;
 	readonly maker?: number;
 
 	/**

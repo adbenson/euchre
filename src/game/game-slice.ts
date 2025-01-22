@@ -39,17 +39,17 @@ export function passBidReducer(state: WritableDraft<GameState>): void {
 }
 
 export function orderUpCardReducer(state: WritableDraft<GameState>): void {
-	state.trump = state.table.upCard!.suit;
+	state.best = state.table.upCard!.suit;
 	state.maker = state.currentPlayer;
 
 	state.phase = GamePhase.DEALER_DISCARD;
 }
 
-export function callTrumpReducer(state: WritableDraft<GameState>, action: PayloadAction<CardSuit>): void {
+export function callBestReducer(state: WritableDraft<GameState>, action: PayloadAction<CardSuit>): void {
 
 	const suit = action.payload;
 	// Validate that suit is not same as upcard
-	state.trump = suit;
+	state.best = suit;
 	state.maker = state.currentPlayer;
 
 	state.table.kitty.push(state.table.upCard!);
@@ -101,7 +101,7 @@ export function playCardReducer(state: WritableDraft<GameState>, action: Payload
 }
 
 function scoreTrickReducer(state: WritableDraft<GameState>): void {
-	const winner = winningPlayer(state.table.plays, state.trump!);
+	const winner = winningPlayer(state.table.plays, state.best!);
 
 	state.table.tricks[winner].push(state.table.plays);
 	state.table.plays = [];
@@ -131,7 +131,7 @@ function scoreHandReducer(state: WritableDraft<GameState>): void {
 function endGameReducer(state: WritableDraft<GameState>): void {
 	// Clear the board
 	state.table = initialTableState;
-	state.trump = undefined;
+	state.best = undefined;
 
 	state.phase = GamePhase.END;
 }
@@ -142,7 +142,7 @@ export function autoPlayReducer(state: WritableDraft<GameState>): void {
 	} else if (state.phase === GamePhase.BID1) {
 		orderUpCardReducer(state);
 	} else if (state.phase === GamePhase.BID2) {
-		callTrumpReducer(state, {payload: CardSuit.SPADES, type: ''});
+		callBestReducer(state, {payload: CardSuit.SPADES, type: ''});
 	} else if (state.phase === GamePhase.DEALER_DISCARD) {
 		const card = state.table.hands[state.dealer][0];
 		dealerDiscardAndPickupReducer(state, {payload: card, type: ''});
@@ -160,7 +160,7 @@ export const gameSlice = createSlice({
 		deal: dealReducer,
 		passBid: passBidReducer,
 		orderUpCard: orderUpCardReducer,
-		callTrump: callTrumpReducer,
+		callBest: callBestReducer,
 		dealerDiscardAndPickup: dealerDiscardAndPickupReducer,
 		playCard: playCardReducer,
 		autoPlay: autoPlayReducer,
@@ -172,7 +172,7 @@ export const {
 	deal,
 	passBid,
 	orderUpCard,
-	callTrump,
+	callBest,
 	dealerDiscardAndPickup,
 	playCard,
 	autoPlay,

@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { Card, CardSuit } from "../game/card-models";
-import { callTrump, deal, dealerDiscardAndPickup, orderUpCard, passBid, playCard } from "../game/game-slice";
+import { callBest, deal, dealerDiscardAndPickup, orderUpCard, passBid, playCard } from "../game/game-slice";
 import { GamePhase } from "../game/game-state";
 import { Hand } from "./Hand";
 import styles from "./Player.module.css";
@@ -27,7 +27,7 @@ export function Player(props: PlayerProps) {
 	const showDeal = phase === GamePhase.DEAL && isDealer;
 	const showPassBid = isCurrent && (phase === GamePhase.BID1 || (!isDealer && phase === GamePhase.BID2));
 	const showOrderUp = isCurrent && phase === GamePhase.BID1;
-	const showCallTrump = isCurrent && phase === GamePhase.BID2;
+	const showCallBest = isCurrent && phase === GamePhase.BID2;
 
 	const canPlayCard = isCurrent && phase === GamePhase.PLAY_HAND;
 	const dealerDiscard = isDealer && phase === GamePhase.DEALER_DISCARD;
@@ -43,7 +43,7 @@ export function Player(props: PlayerProps) {
 		}
 	};
 
-	const onSuitClickHandler = (suit: CardSuit) => dispatch(callTrump(suit));
+	const onSuitClickHandler = (suit: CardSuit) => dispatch(callBest(suit));
 
 	const passBidButton = () =>
 		<button onClick={() => dispatch(passBid())}>
@@ -55,7 +55,7 @@ export function Player(props: PlayerProps) {
 			{isDealer ? "PICK UP" : "ORDER UP"}
 		</button>
 
-	const callTrumpButtons = () =>
+	const callBestButtons = () =>
 		<SuitButtons onSuitClick={onSuitClickHandler}></SuitButtons>
 
 	const dealButton = () =>
@@ -83,7 +83,7 @@ export function Player(props: PlayerProps) {
 					{showDeal ? dealButton() : null}
 					{showPassBid ? passBidButton() : null}
 					{showOrderUp ? orderUpButton() : null}
-					{showCallTrump ? callTrumpButtons() : null}
+					{showCallBest ? callBestButtons() : null}
 				</div>
 			</div>
 

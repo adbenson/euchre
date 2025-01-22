@@ -25,8 +25,8 @@ export function Hand(props: HandProps) {
 
 	const interval = 1.0 / (p.cards.length - 1);
 
-	const trump = useAppSelector(state => state.game.trump);
-	const sorted = sortCards(p.cards, trump);
+	const best = useAppSelector(state => state.game.best);
+	const sorted = sortCards(p.cards, best);
 
 	return (
 		<div className={styles.hand}>

@@ -15,7 +15,7 @@ export function Table() {
 
 	const maker = (game.maker !== undefined) && game.players[game.maker].firstName;
 
-	const showTrump = game.trump && (game.phase === GamePhase.PLAY_HAND);
+	const showBest = game.best && (game.phase === GamePhase.PLAY_HAND);
 
 	return (
 		<div className={styles.table}>
@@ -23,10 +23,10 @@ export function Table() {
 			<div className={styles.topOfScreen}>
 				<MiniStack cards={game.table.kitty}></MiniStack>
 
-				{game.trump && showTrump ?
-					<span className={styles.trump}>
+				{game.best && showBest ?
+					<span className={styles.best}>
 						{maker} ordered up
-						<img alt={game.trump} className={styles.trumpSuit} src={suitToImage[game.trump!]}></img>
+						<img alt={game.best} className={styles.bestSuit} src={suitToImage[game.best!]}></img>
 					</span>
 					: null
 				}
